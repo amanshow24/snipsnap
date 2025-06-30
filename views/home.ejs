@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("./partials/head") %>
+  <title>Homepage</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .content-wrapper {
+      min-height: calc(100vh - 150px);
+      padding-top: 40px;
+      padding-bottom: 100px;
+    }
+
+    .no-blogs {
+      padding-bottom: 100px;
+    }
+
+    .like-form {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .like-icon {
+      border: none;
+      background: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .like-icon:hover i {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+
+    .like-icon i {
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+  </style>
+  <link rel="stylesheet" href="/css/responsive-home.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <%- include("./partials/nav") %>
+
+  <!-- blog creation toast msg -->
+  <% if (typeof blogCreated !== "undefined" && blogCreated) { %>
+  <div id="toast-blog" class="custom-toast">
+    ✅ <%= blogCreated %>
+  </div>
+<% } %>
+<!-- blog delete toast msg -->
+<% if (typeof blogDeleted !== "undefined" && blogDeleted) { %>
+  <div id="toast-blog-deleted" class="custom-toast">
+    <%= blogDeleted %>
+  </div>
+<% } %>
+<!-- logout toast msg -->
+<% if (typeof logoutMessage !== "undefined" && logoutMessage) { %>
+  <div id="toast-logout" class="custom-toast">
+    <%= logoutMessage %>
+  </div>
+<% } %>
+<!-- delete account toast -->
+<% if (typeof accountDeleted !== "undefined" && accountDeleted) { %>
+  <div id="toast-account-deleted" class="custom-toast">
+    <%= accountDeleted %>
+  </div>
+<% } %>
+
+
+
+
+
+  <!-- Welcome -->
+<% if (welcomeMessage) { %>
+  <div id="welcome-alert" 
+       class="text-center mx-4 mt-4 py-3 px-4 rounded-4 shadow-lg"
+       style="
+         background: linear-gradient(to right, #ffdde1, #ee9ca7);
+         color: #5c002e;
+         font-size: 1.8rem;
+         font-weight: 700;
+         border: none;
+         animation: fadeIn 0.5s ease-in-out;
+       ">
+     <%= welcomeMessage %>
+  </div>
+<% } %>
+
+
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+
+
+
+
+  <!-- Main Content -->
+  <main>
+    <div class="container content-wrapper <%= blogs.length === 0 ? 'no-blogs' : '' %>">
+      <h2 class="mb-4 fw-bold text-dark text-center" style="font-size: 2rem;">📚 Latest Blogs</h2>
+
+      <% if (blogs.length === 0) { %>
+        <p class="text-center text-muted">No blogs available. Be the first to post!</p>
+      <% } %>
+
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 gx-5 gy-5 mb-5">
+        <% blogs.forEach(blog => { 
+             const userLiked = user ? blog.likes.some(id => id.toString() === user._id.toString()) : false;
+        %>
+          <div class="col d-flex justify-content-center">
+            <div class="card shadow-sm h-100 rounded-4 overflow-hidden" style="border: none; max-width: 380px; width: 100%; ">
+              <img src="<%= blog.coverImageURL %>" class="card-img-top img-fluid" alt="Blog Cover" style="height: 170px; object-fit: cover;">
+              
+              <div class="card-body d-flex flex-column">
+
+                <!-- Blog Title -->
+                <h5 class="card-title fw-bold text-dark mb-2" style="font-size: 1.1rem;"><%= blog.title %></h5>
+
+                <!-- Author and Date -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="d-flex align-items-center text-muted" style="font-size: 0.9rem;">
+                    <i class="fas fa-user me-1" style="font-size: 0.85rem; opacity: 0.7;"></i>
+                    <span><%= blog.createdBy?.fullName || 'Unknown' %></span>
+                  </div>
+                  <div class="text-muted" style="font-size: 0.85rem; opacity: 0.8;">
+                    <i class="far fa-calendar-alt me-1"></i>
+                    <%= new Date(blog.createdAt).toLocaleString('en-GB', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric'
+                    }).replace(',', '') %>
+                  </div>
+                </div>
+
+                <!-- Read More & Like Section -->
+                <div class="d-flex align-items-center justify-content-between mt-auto">
+                  <a href="/blog/<%= blog._id %>" class="btn btn-dark btn-sm rounded-3 px-3">Read More</a>
+<% if (user) { %>
+  <form action="/blog/<%= blog._id %>/like" method="POST" class="like-form">
+    <button type="submit" class="like-icon">
+      <i class="fa<%= userLiked ? 's' : 'r' %> fa-heart" style="color: <%= userLiked ? 'red' : '#888' %>;"></i>
+    </button>
+    <span class="text-muted"><%= blog.likes.length %></span>
+  </form>
+<% } else { %>
+
+
+                    <div class="text-muted">
+                      <i class="far fa-heart" style="color: #888;"></i> <%= blog.likes.length %>
+                    </div>
+                  <% } %>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer & Scripts -->
+  <%- include("./partials/scripts") %>
+  <%- include("./partials/footer") %>
+  
+  <style>
+ .custom-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #1f1f1f;         /* Darker than #333, softer on eyes */
+  color: #f1f1f1;                    /* Slightly off-white for better contrast */
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Deeper shadow for dark theme */
+  opacity: 0;
+  animation: slideIn 0.4s forwards;
+  z-index: 9999;
+  backdrop-filter: blur(3px);        /* Subtle glass effect (optional) */
+}
+
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+
+
+</body>
+</html>

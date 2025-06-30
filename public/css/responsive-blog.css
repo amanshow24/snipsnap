@@ -1,0 +1,165 @@
+/* === BLOG PAGE STYLING === */
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Blog container card */
+.card {
+  background-color: #ffffff;
+}
+
+/* Title */
+h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+/* Cover image */
+img.img-fluid {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* Blog body content */
+.bg-white {
+  background-color: #ffffff !important;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+/* Author info */
+.blog-author {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+/* Like button */
+.like-btn i {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.like-btn:hover i {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+
+/* Delete button */
+.delete-btn {
+  color: #000 !important;
+}
+
+.delete-btn i {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn:hover {
+  opacity: 0.75;
+}
+
+.delete-btn:hover i {
+  transform: scale(1.2);
+}
+
+/* Comment layout */
+.comment-box {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.comment-box img {
+  width: 35px;
+  height: 35px;
+}
+
+.comment-box p {
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+.comment-box .like-btn i {
+  font-size: 1.1rem;
+}
+
+/* Toast styling */
+.custom-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #1f1f1f;
+  color: #f1f1f1;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: slideIn 0.4s forwards;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.7rem;
+  }
+
+  .bg-white {
+    font-size: 1rem;
+  }
+
+  .comment-box p {
+    font-size: 0.9rem;
+  }
+
+  .like-btn i,
+  .delete-btn i {
+    font-size: 1.2rem !important;
+  }
+
+  .custom-toast {
+    right: 15px;
+    bottom: 20px;
+    font-size: 0.95rem;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .blog-author {
+    font-size: 0.9rem;
+  }
+
+  .bg-white {
+    padding: 1rem !important;
+  }
+
+  .card {
+    padding: 1rem !important;
+  }
+
+  .btn {
+    font-size: 0.95rem;
+  }
+
+  .comment-box {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

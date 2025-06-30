@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>Team | SnipSnap</title>
+  <link rel="stylesheet" href="/css/responsive-team.css">
+</head>
+<body style="font-family: 'Segoe UI', sans-serif;">
+  <%- include('./partials/nav') %>
+
+  <div class="container my-5" style="max-width: 900px;">
+    <h2 class="fw-bold mb-4 text-dark text-center">👥 Meet the Team</h2>
+
+    <p class="text-secondary text-center mb-5" style="font-size: 1.05rem;">
+      SnipSnap is brought to you by passionate individuals who believe in empowering people through writing and sharing.
+    </p>
+
+    <div class="row justify-content-center g-4">
+      <!-- Team Member -->
+      <div class="col-md-4 text-center">
+        <img src="https://avatars.githubusercontent.com/u/134675885?v=4" alt="Aman Show" class="rounded-circle shadow-sm mb-3" width="120" height="120">
+        <h5 class="fw-bold text-dark mb-1">Aman Show</h5>
+        <p class="text-muted mb-1">Founder & Developer</p>
+        <p class="text-secondary" style="font-size: 0.95rem;">Loves clean code, building web apps, and simplifying ideas for users.</p>
+        <div>
+          <a href="https://github.com/amanshow24" class="text-dark fs-5 me-3"><i class="bi bi-github"></i></a>
+          <a href="https://www.linkedin.com/in/aman-kumar-show-a5589b290?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="text-dark fs-5 me-3"><i class="bi bi-linkedin"></i></a>
+          <a href="mailto:amanshow9800@gmail.com" class="text-dark fs-5"><i class="bi bi-envelope-fill"></i></a>
+        </div>
+      </div>
+
+      <!-- Future teammate placeholder -->
+      <div class="col-md-4 text-center">
+        <img src="https://via.placeholder.com/120x120?text=👤" alt="Teammate" class="rounded-circle shadow-sm mb-3">
+        <h5 class="fw-bold text-dark mb-1">Coming Soon</h5>
+        <p class="text-muted mb-1">Contributor</p>
+        <p class="text-secondary" style="font-size: 0.95rem;">This could be you! Reach out if you want to collaborate on SnipSnap 🚀</p>
+      </div>
+    </div>
+  </div>
+
+  <%- include('./partials/scripts') %>
+  <%- include('./partials/footer') %>
+</body>
+</html>

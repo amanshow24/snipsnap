@@ -1,0 +1,135 @@
+/* === HOMEPAGE LAYOUT === */
+.content-wrapper {
+  padding-top: 40px;
+  padding-bottom: 100px;
+}
+
+html, body {
+  background-color: #ffffff !important;
+  color: #000000;
+}
+
+
+/* Headings */
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+/* Card */
+.card {
+  transition: transform 0.2s ease;
+  border-radius: 16px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Card Image */
+.card-img-top {
+  height: 170px;
+  object-fit: cover;
+}
+
+/* Author & Date Row */
+.card .text-muted {
+  font-size: 0.9rem;
+}
+
+/* Like Button */
+.like-form {
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.like-icon {
+  border: none;
+  background: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.like-icon i {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.like-icon:hover i {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+
+/* Toast (Already Defined in Page, Scoped Here for Safety) */
+.custom-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #1f1f1f;
+  color: #f1f1f1;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  animation: slideIn 0.4s forwards;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+/* === RESPONSIVE BREAKPOINTS === */
+
+/* Tablets */
+@media (max-width: 991.98px) {
+  .card {
+    max-width: 100%;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card .text-muted {
+    font-size: 0.85rem;
+  }
+
+  .btn-sm {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Phones */
+@media (max-width: 576.98px) {
+  h2 {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .card {
+    margin-bottom: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .like-icon {
+    font-size: 1rem;
+  }
+
+  .card .text-muted {
+    font-size: 0.8rem;
+  }
+
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+  }
+}

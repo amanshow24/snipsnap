@@ -1,0 +1,98 @@
+/* === CONTACT PAGE === */
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+  padding: 2rem 1.25rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+p {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #495057;
+}
+
+form .form-label {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+form .form-control {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+form .form-control:focus {
+  border-color: #212529;
+  box-shadow: 0 0 0 0.15rem rgba(33, 37, 41, 0.2);
+}
+
+form button[type="submit"] {
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 10px 0;
+}
+
+form small {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Contact Email */
+.mt-5.text-center p {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.mt-5.text-center .text-dark {
+  font-weight: 600;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+
+  form .form-control {
+    font-size: 0.95rem;
+  }
+
+  form button[type="submit"] {
+    font-size: 1rem;
+  }
+
+  .mt-5.text-center p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  form .form-control {
+    padding: 8px;
+  }
+
+  form button[type="submit"] {
+    padding: 9px 0;
+  }
+}

@@ -1,0 +1,63 @@
+html, body {
+  background-color: #ffffff !important;
+  color: #000000;
+}
+
+
+/* Mobile-first styles */
+.container {
+  padding: 0 1rem;
+}
+
+h2 {
+  font-size: 1.7rem;
+}
+
+h5 {
+  font-size: 1.15rem;
+}
+
+p,
+ul {
+  font-size: 1rem;
+}
+
+ul {
+  padding-left: 1.25rem;
+}
+
+/* Tablets */
+@media (min-width: 576px) {
+  h2 {
+    font-size: 2rem;
+  }
+
+  h5 {
+    font-size: 1.25rem;
+  }
+
+  p,
+  ul {
+    font-size: 1.05rem;
+  }
+}
+
+/* Desktops */
+@media (min-width: 992px) {
+  .container {
+    padding: 0;
+  }
+
+  h2 {
+    font-size: 2.2rem;
+  }
+
+  h5 {
+    font-size: 1.3rem;
+  }
+
+  p,
+  ul {
+    font-size: 1.1rem;
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("./partials/head") %>
+  <title>Sign Up - Email</title>
+  <link rel="stylesheet" href="/css/responsive-signup-email.css">
+</head>
+<body style="font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa;">
+  <%- include("./partials/nav") %>
+
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="card shadow-lg auth-card rounded-4 p-5" style="width: 100%; max-width: 450px; border: none;">
+      <h2 class="text-center fw-bold text-dark mb-4" style="font-size: 2rem;">📝 Create Account</h2>
+
+      <% if (errorMessage) { %>
+        <div class="alert alert-danger text-center fw-semibold rounded-3 shadow-sm mb-4" style="font-size: 0.95rem;">
+          <%= errorMessage %>
+        </div>
+      <% } %>
+
+      <form action="/user/signup-email" method="POST">
+        <div class="mb-3 position-relative">
+          <label for="email" class="form-label fw-semibold text-secondary">Enter your email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+            style="padding: 10px; border-radius: 10px;"
+          >
+          <i class="bi bi-envelope-fill" style="
+            position: absolute;
+            top: 70%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.2rem;"></i>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-dark btn-lg rounded-3">Send OTP</button>
+        </div>
+      </form>
+
+      <p class="mt-4 text-center" style="font-size: 0.95rem;">
+        Already have an account? 
+        <a href="/user/signin" class="fw-semibold text-decoration-none">Login here</a>
+      </p>
+    </div>
+  </div>
+
+  <%- include("./partials/scripts") %>
+  <%- include('./partials/footer') %>
+</body>
+</html>

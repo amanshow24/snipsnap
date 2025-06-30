@@ -1,0 +1,92 @@
+/* === Responsive - Verify Email Page === */
+
+/* Form Card Tweaks */
+.auth-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 2.5rem;
+  border-radius: 1.25rem;
+}
+
+/* Inputs & Icons */
+.form-control {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.position-relative i {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+/* Alert Box */
+.alert {
+  font-size: 0.95rem;
+}
+
+/* Headings and Text */
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+p {
+  font-size: 0.95rem;
+}
+
+/* OTP Countdown */
+#signupCountdown {
+  font-weight: 600;
+}
+
+/* Button Tweaks */
+.btn-dark {
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 2rem 1.5rem;
+    border-radius: 0.75rem;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+  }
+
+  p,
+  .form-control {
+    font-size: 0.95rem;
+  }
+
+  .btn-dark {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 2rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+  }
+
+  .btn-dark {
+    font-size: 0.9rem;
+    padding: 0.65rem;
+  }
+}

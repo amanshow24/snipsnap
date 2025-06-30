@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("./partials/head") %>
+  <title>Add New Blog | SnipSnap</title>
+  <style>
+    .form-label {
+      font-weight: 600;
+      color: #495057;
+    }
+
+    .form-control {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ced4da;
+      font-size: 1rem;
+    }
+
+    .form-control:focus {
+      border-color: #212529;
+      box-shadow: 0 0 0 0.15rem rgba(33, 37, 41, 0.25);
+    }
+
+    .btn-publish {
+      background-color: #212529;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 12px;
+      border-radius: 12px;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn-publish:hover {
+      background-color: #000;
+    }
+
+    .card-blog-form {
+      max-width: 600px;
+      border: none;
+      border-radius: 20px;
+      padding: 2.5rem;
+    }
+
+    
+  </style>
+  <link rel="stylesheet" href="/css/responsive-addblog.css">
+
+</head>
+<body class="bg-light" style="font-family: 'Segoe UI', sans-serif;">
+  <%- include("./partials/nav") %>
+
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="card shadow card-blog-form w-100">
+      <h2 class="text-center mb-4 text-dark fw-bold" style="font-size: 2rem;">✍️ Create a New Blog</h2>
+
+      <form id="addBlogForm" action="/blog" method="post" enctype="multipart/form-data" novalidate>
+        <!-- Cover Image -->
+        <div class="mb-4">
+          <label for="coverImage" class="form-label">Cover Image</label>
+          <input type="file" class="form-control" id="coverImage" name="coverImage">
+        </div>
+
+        <!-- Title -->
+        <div class="mb-4">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" name="title" maxlength="60" placeholder="Enter your blog title (within 60 chars)" required>
+          <div id="titleError" class="invalid-feedback d-none">
+            Title is required and must be under 60 characters.
+          </div>
+          <div class="form-text text-muted mt-1" style="font-size: 0.9rem;">Give your blog a meaningful title.</div>
+        </div>
+
+        <!-- Body -->
+        <div class="mb-4">
+          <label for="body" class="form-label">Body</label>
+          <textarea name="body" class="form-control" id="body" rows="7" maxlength="25000" placeholder="Write your content here..." required></textarea>
+          <div id="bodyError" class="invalid-feedback d-none">
+            Body is required and must be under 25,000 characters.
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="d-grid">
+          <button type="submit" class="btn btn-publish">Publish Blog</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <%- include("./partials/scripts") %>
+  <%- include("./partials/footer") %>
+
+  
+
+</body>
+</html>

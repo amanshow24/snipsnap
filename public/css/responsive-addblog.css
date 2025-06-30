@@ -1,0 +1,101 @@
+/* === ADD BLOG PAGE === */
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.card-blog-form {
+  background-color: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: none;
+  max-width: 600px;
+  width: 100%;
+}
+
+.card-blog-form h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.form-control {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #212529;
+  box-shadow: 0 0 0 0.15rem rgba(33, 37, 41, 0.25);
+}
+
+.invalid-feedback {
+  display: none;
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.form-text {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.btn-publish {
+  background-color: #212529;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 12px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-publish:hover {
+  background-color: #000000;
+}
+
+/* === RESPONSIVE ADJUSTMENTS === */
+@media (max-width: 768px) {
+  .card-blog-form {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .card-blog-form h2 {
+    font-size: 1.6rem;
+  }
+
+  .form-control {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .btn-publish {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-blog-form {
+    padding: 1.25rem;
+  }
+
+  .card-blog-form h2 {
+    font-size: 1.4rem;
+  }
+
+  .form-text {
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>About | SnipSnap</title>
+  <link rel="stylesheet" href="/css/responsive-about.css">
+
+</head>
+<body style="font-family: 'Segoe UI', sans-serif;">
+  <%- include('./partials/nav') %>
+
+  <div class="container my-5" style="max-width: 800px;">
+    <h2 class="fw-bold mb-4 text-dark text-center">📖 About SnipSnap</h2>
+
+    <p class="text-secondary" style="font-size: 1.05rem; line-height: 1.8;">
+      SnipSnap is a modern, lightweight, and user-friendly blogging platform designed to make writing and sharing thoughts accessible to everyone.
+      Whether you're a student, developer, writer, or enthusiast, SnipSnap helps you express your ideas, tell stories, or post tutorials in a clean and distraction-free environment.
+    </p>
+
+    <p class="text-secondary mt-4" style="font-size: 1.05rem; line-height: 1.8;">
+      Founded with simplicity and creativity in mind, SnipSnap encourages open sharing and community engagement. No unnecessary clutter—just your content, your words, your space.
+    </p>
+
+    <p class="text-secondary mt-4" style="font-size: 1.05rem; line-height: 1.8;">
+      We’re committed to continuous improvement and introducing more useful features like blog editing, inline images, social sharing, and more.
+      If you have ideas or feedback, don’t hesitate to <a href="/contact" class="text-decoration-none fw-semibold">reach out to us</a>.
+    </p>
+
+    <div class="mt-5 text-center">
+      <p class="fw-bold text-dark mb-1">💡 Built with ❤️ by Aman Show</p>
+      <p class="text-muted">Powered by Node.js, Express, MongoDB, and Bootstrap</p>
+    </div>
+  </div>
+
+  <%- include('./partials/scripts') %>
+  <%- include('./partials/footer') %>
+</body>
+</html>

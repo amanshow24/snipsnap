@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>Contact | SnipSnap</title>
+  <link rel="stylesheet" href="/css/responsive-contact.css">
+
+</head>
+<body style="font-family: 'Segoe UI', sans-serif;">
+  <%- include('./partials/nav') %>
+
+  <div class="container my-5" style="max-width: 700px;">
+    <h2 class="fw-bold mb-4 text-dark text-center">📬 Contact Us</h2>
+    
+    <p class="text-secondary text-center mb-4" style="font-size: 1.05rem;">
+      Have questions, feedback, or issues? Fill out the form below or reach us directly via email.
+    </p>
+
+    <form>
+      <!-- Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label fw-semibold text-secondary">Your Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter your name" style="padding: 10px; border-radius: 10px;">
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold text-secondary">Your Email</label>
+        <input type="email" class="form-control" id="email" placeholder="you@example.com" style="padding: 10px; border-radius: 10px;">
+      </div>
+
+      <!-- Message -->
+      <div class="mb-4">
+        <label for="message" class="form-label fw-semibold text-secondary">Message</label>
+        <textarea class="form-control" id="message" rows="5" placeholder="Write your message here..." style="padding: 10px; border-radius: 10px;"></textarea>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-dark btn-lg rounded-3" disabled>Send Message</button>
+        <small class="text-muted mt-2 text-center">Note: Message sending is not yet implemented.</small>
+      </div>
+    </form>
+
+    <div class="mt-5 text-center">
+      <p class="text-secondary mb-1" style="font-size: 1rem;">Or email us at:</p>
+      <p class="fw-semibold text-dark mb-0">📧 support@snipsnap.com</p>
+      <p class="fw-semibold text-dark">📧 amanshow9800@gmail.com</p>
+    </div>
+  </div>
+
+  <%- include('./partials/scripts') %>
+  <%- include('./partials/footer') %>
+</body>
+</html>

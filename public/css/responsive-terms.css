@@ -1,0 +1,75 @@
+/* ===== Responsive Terms Page ===== */
+
+
+/* Default Styling Tweaks */
+
+html, body {
+  background-color: #ffffff !important;
+  color: #000000;
+}
+
+.container {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+/* Paragraphs and Lists */
+p,
+ul {
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+ul {
+  padding-left: 1.25rem;
+}
+
+/* Headings inside terms */
+h5 {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  h5 {
+    font-size: 1.1rem;
+  }
+
+  p,
+  ul {
+    font-size: 1rem;
+  }
+
+  .container {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  p,
+  ul {
+    font-size: 0.95rem;
+  }
+
+  h5 {
+    font-size: 1.05rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+}

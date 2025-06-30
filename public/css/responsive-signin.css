@@ -1,0 +1,65 @@
+/* Base mobile-first styles */
+.auth-card {
+  width: 100%;
+  padding: 2rem 1.5rem;
+  border-radius: 1rem;
+}
+
+h2 {
+  font-size: 1.7rem;
+}
+
+form .form-label {
+  font-size: 0.95rem;
+}
+
+form .form-control {
+  font-size: 0.95rem;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+i.bi {
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+/* Medium devices (tablet and above) */
+@media (min-width: 576px) {
+  .auth-card {
+    padding: 2.5rem 2rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .form-label,
+  .form-control {
+    font-size: 1rem;
+  }
+}
+
+/* Large devices (desktop and above) */
+@media (min-width: 992px) {
+  .auth-card {
+    max-width: 450px;
+    padding: 3rem;
+  }
+
+  h2 {
+    font-size: 2.2rem;
+  }
+
+  .form-label {
+    font-size: 1.05rem;
+  }
+
+  .form-control {
+    font-size: 1.05rem;
+  }
+
+  i.bi {
+    font-size: 1.2rem;
+  }
+}
