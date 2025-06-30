@@ -24,7 +24,7 @@ function sendOTPEmail(email, otp, purpose = "reset") {
 
   const msg = {
     to: email,
-    from: process.env.SENDGRID_SENDER,
+    from: process.env.SENDGRID_SENDER || "noreply@snipsnap.com", // fallback added
     subject,
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
@@ -43,7 +43,9 @@ function sendOTPEmail(email, otp, purpose = "reset") {
     `,
   };
 
-  return sgMail.send(msg);
+  return sgMail.send(msg).catch((err) => {
+    console.error("❌ SendGrid Email Error:", err); // added for debug
+  });
 }
 
 module.exports = { sendOTPEmail };

@@ -59,9 +59,11 @@ userSchema.virtual("isFullyRegistered").get(function () {
   return !!(this.fullName && this.password);
 });
 
-// ✅ Password Hash Middleware
+// ✅ Password Hash Middleware (✅ only updated this block)
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password") || !this.password) return next();
+  if (!this.isModified("password") || !this.password || this.password.startsWith("$2")) {
+    return next();
+  }
   const saltRounds = 10;
   this.password = await bcrypt.hash(this.password, saltRounds);
   next();
