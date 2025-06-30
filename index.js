@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const path = require("path");
+const fs = require("fs"); // ✅ Added for file system check
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -18,6 +19,12 @@ const { checkForAuthenticationCookie } = require("./middlewares/authentication")
 const app = express();
 const PORT = process.env.PORT || 9000;
 
+// ✅ Ensure public/uploads folder exists
+const uploadsDir = path.join(__dirname, "public", "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log("✅ uploads/ folder created");
+}
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -25,7 +32,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
 .then(() => console.log("✅ MongoDB Connected to Atlas"))
 .catch((err) => console.error("❌ MongoDB Connection Error:", err));
-
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
