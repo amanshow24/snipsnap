@@ -146,7 +146,8 @@
                   </div>
                   <div class="text-muted" style="font-size: 0.85rem; opacity: 0.8;">
                     <i class="far fa-calendar-alt me-1"></i>
-                    <%= new Date(blog.createdAt).toLocaleString('en-GB', {
+                    <%= new Date(blog.createdAt).toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
                       day: '2-digit',
                       month: 'short',
                       year: 'numeric'
