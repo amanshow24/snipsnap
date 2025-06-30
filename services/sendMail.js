@@ -43,9 +43,15 @@ function sendOTPEmail(email, otp, purpose = "reset") {
     `,
   };
 
-  return sgMail.send(msg).catch((err) => {
-    console.error("❌ SendGrid Email Error:", err); // added for debug
+ return sgMail
+  .send(msg)
+  .then(() => {
+    console.log("✅ OTP email sent to:", email);
+  })
+  .catch((err) => {
+    console.error("❌ SendGrid error:", err.response?.body || err.message || err);
   });
+
 }
 
 module.exports = { sendOTPEmail };
