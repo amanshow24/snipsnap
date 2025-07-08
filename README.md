@@ -1,5 +1,5 @@
 
-# ✂️ SnipSnap
+# 📝 SnipSnap
 
 SnipSnap is a dynamic, full-featured blogging platform that enables users to create, read, and interact with blog posts. With user authentication, responsive design, and clean UI, it’s built to be fast, extensible, and beginner-friendly.
 
