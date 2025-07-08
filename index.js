@@ -87,6 +87,12 @@ app.use("/blog", blogRoute);
 const staticRoutes = require("./routes/static");
 app.use("/", staticRoutes);
 
+// Health check route
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
