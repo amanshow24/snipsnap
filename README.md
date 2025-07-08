@@ -7,7 +7,7 @@ SnipSnap is a dynamic, full-featured blogging platform that enables users to cre
 
 ## 📸 Live Demo 
 
-<!-- 🔗 [Live Demo](https://snipsnap-1xvw.onrender.com) -->
+ 🔗 [Live Demo]  (https://snipsnap-1xvw.onrender.com) 
 
 ---
 
