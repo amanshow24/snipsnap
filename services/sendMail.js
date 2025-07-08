@@ -1,6 +1,5 @@
-const { Resend } = require('resend');
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /**
  * Send an OTP email for either signup verification or password reset
@@ -8,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
  * @param {string} otp - OTP code
  * @param {string} purpose - 'signup' or 'reset'
  */
-async function sendOTPEmail(email, otp, purpose = "reset") {
+function sendOTPEmail(email, otp, purpose = "reset") {
   const isSignup = purpose === "signup";
 
   const subject = isSignup
@@ -23,34 +22,36 @@ async function sendOTPEmail(email, otp, purpose = "reset") {
     ? 'Thanks for signing up! Please verify your email address using the OTP below:'
     : 'Here is your One-Time Password (OTP) to reset your SnipSnap account password:';
 
-  const htmlContent = `
-    <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-      <h2 style="color: #4A90E2;">${heading}</h2>
-      <p>Hello,</p>
-      <p>${introMessage}</p>
-      <h1 style="letter-spacing: 2px; background: #f0f0f0; padding: 10px 20px; display: inline-block; border-radius: 5px;">
-        ${otp}
-      </h1>
-      <p>This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.</p>
-      <p style="margin-top: 30px;">If you did not request this, you can ignore this email.</p>
-      <hr />
-      <p style="font-size: 0.9rem;">Need help? Reach us at <a href="mailto:support@snipsnap.com">support@snipsnap.com</a></p>
-      <p style="font-size: 0.8rem; color: #aaa;">© ${new Date().getFullYear()} 📝 SnipSnap. All rights reserved. Aman Show.</p>
-    </div>
-  `;
+  const msg = {
+    to: email,
+    from: process.env.SENDGRID_SENDER || "noreply@snipsnap.com", // fallback added
+    subject,
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+        <h2 style="color: #4A90E2;">${heading}</h2>
+        <p>Hello,</p>
+        <p>${introMessage}</p>
+        <h1 style="letter-spacing: 2px; background: #f0f0f0; padding: 10px 20px; display: inline-block; border-radius: 5px;">
+          ${otp}
+        </h1>
+        <p>This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.</p>
+        <p style="margin-top: 30px;">If you did not request this, you can ignore this email.</p>
+        <hr />
+        <p style="font-size: 0.9rem;">Need help? Reach us at <a href="mailto:support@snipsnap.com">support@snipsnap.com</a></p>
+        <p style="font-size: 0.8rem; color: #aaa;">© ${new Date().getFullYear()} 📝 SnipSnap. All rights reserved. Aman Show.</p>
+      </div>
+    `,
+  };
 
-  try {
-    const result = await resend.emails.send({
-      from: 'SnipSnap <onboarding@resend.dev>',
-      to: email,
-      subject,
-      html: htmlContent,
-    });
+ return sgMail
+  .send(msg)
+  .then(() => {
+    console.log("✅ OTP email sent to:", email);
+  })
+  .catch((err) => {
+    console.error("❌ SendGrid error:", err.response?.body || err.message || err);
+  });
 
-    console.log("✅ OTP email sent to:", email, "| Message ID:", result?.id || "N/A");
-  } catch (err) {
-    console.error("❌ Resend error:", err?.message || err);
-  }
 }
 
 module.exports = { sendOTPEmail };
