@@ -92,4 +92,10 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke!");
 });
 
-app.listen(PORT, () => console.log(`Server Started at PORT ${PORT}`));
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Server started on http://0.0.0.0:${PORT}`);
+});
+
+// Optional but recommended for Render free tier
+server.keepAliveTimeout = 120000;   // 120 seconds
+server.headersTimeout = 130000;     // 130 seconds
