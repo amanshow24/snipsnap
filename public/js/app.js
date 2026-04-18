@@ -204,6 +204,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const bodyError = document.getElementById('bodyError');
 
   if (form) {
+    const genreSelect = document.getElementById('genre');
+    const customGenreContainer = document.getElementById('customGenreContainer');
+    const customGenreInput = document.getElementById('customGenre');
+    const genreError = document.getElementById('genreError');
+    const customGenreError = document.getElementById('customGenreError');
+
+    genreSelect?.addEventListener('change', () => {
+      if (genreSelect.value === 'other') {
+        customGenreContainer.classList.remove('d-none');
+        customGenreInput.required = true;
+      } else {
+        customGenreContainer.classList.add('d-none');
+        customGenreInput.required = false;
+        customGenreInput.classList.remove('is-invalid');
+        customGenreError.classList.add('d-none');
+      }
+    });
+
     form.addEventListener('submit', function (e) {
       let isValid = true;
 
@@ -225,6 +243,29 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         bodyInput.classList.remove('is-invalid');
         bodyError.classList.add('d-none');
+      }
+
+      if (genreSelect) {
+        if (!genreSelect.value) {
+          genreSelect.classList.add('is-invalid');
+          genreError.classList.remove('d-none');
+          isValid = false;
+        } else {
+          genreSelect.classList.remove('is-invalid');
+          genreError.classList.add('d-none');
+        }
+      }
+
+      if (genreSelect?.value === 'other') {
+        const customGenre = customGenreInput.value.trim();
+        if (!customGenre) {
+          customGenreInput.classList.add('is-invalid');
+          customGenreError.classList.remove('d-none');
+          isValid = false;
+        } else {
+          customGenreInput.classList.remove('is-invalid');
+          customGenreError.classList.add('d-none');
+        }
       }
 
       if (!isValid) e.preventDefault();

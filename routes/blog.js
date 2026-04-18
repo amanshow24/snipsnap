@@ -1,30 +1,88 @@
 const { Router } = require("express");
 const multer = require("multer");
-const path = require("path");
+const CloudinaryStorage = require("multer-storage-cloudinary");
+const cloudinary = require("cloudinary");
 
 const Blog = require("../models/blog");
 const Comment = require("../models/comment");
 
+const PREDEFINED_GENRES = [
+  "Technology",
+  "Travel",
+  "Lifestyle",
+  "Education",
+  "Health",
+  "Business",
+  "Food",
+  "Entertainment",
+  "Sports",
+  "Science",
+  "Personal",
+];
+
 const router = Router();
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.resolve("./public/uploads/"));
-    },
-    filename: function (req, file, cb) {
-     const fileName = `${Date.now()}-${file.originalname}`;
-     cb(null, fileName);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = CloudinaryStorage({
+  cloudinary,
+  folder: "snipsnap/blog-covers",
+  allowedFormats: ["jpg", "jpeg", "png", "webp"],
+});
+
+const upload = multer({ storage });
+
+function uploadCoverImage(req, res, next) {
+  const middleware = upload.single("coverImage");
+  middleware(req, res, (err) => {
+    if (err) {
+      console.error("Cover image upload failed:", err.message || err);
+      return res.status(400).render("addBlog", {
+        user: req.user,
+        genres: PREDEFINED_GENRES,
+        errorMessage: "Image upload failed. Please verify Cloudinary settings and image format.",
+        formData: req.body || {},
+      });
     }
-  })
-  
-  const upload = multer({ storage: storage })
+    return next();
+  });
+}
 
   
 
 router.get("/add-new", (req,res) => {
     return res.render("addBlog",{
         user:req.user,
-    })
+        genres: PREDEFINED_GENRES,
+    errorMessage: null,
+    formData: {},
+    });
+});
+
+router.get("/:id/edit", async (req, res) => {
+  try {
+    if (!req.user) return res.status(401).send("Unauthorized");
+
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).send("Blog not found");
+
+    if (blog.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You are not authorized to edit this blog");
+    }
+
+    return res.render("editBlog", {
+      user: req.user,
+      blog,
+      genres: PREDEFINED_GENRES,
+    });
+  } catch (error) {
+    console.error("Error loading edit blog page:", error.message);
+    return res.status(500).send("Unable to load edit page");
+  }
 });
 
 
@@ -103,26 +161,86 @@ router.post("/", upload.single("coverImage"), async (req,res) => {
 });  */
 
 
-router.post("/", upload.single("coverImage"), async (req, res) => {
+router.post("/", uploadCoverImage, async (req, res) => {
   try {
-    if (!req.user) return res.status(401).send("Unauthorized");
+    if (!req.user) {
+      return res.status(401).render("addBlog", {
+        user: req.user,
+        genres: PREDEFINED_GENRES,
+        errorMessage: "Please sign in first.",
+        formData: req.body || {},
+      });
+    }
 
-    const { title, body } = req.body;
+    const { title, body, genre, customGenre } = req.body;
+    const finalGenre = genre === "other" ? (customGenre || "").trim() : genre;
 
-   await Blog.create({
-  title,
-  body,
-  createdBy: req.user._id,
-  coverImageURL: req.file ? `/uploads/${req.file.filename}` : null,
-});
+    if (!finalGenre) {
+      return res.status(400).render("addBlog", {
+        user: req.user,
+        genres: PREDEFINED_GENRES,
+        errorMessage: "Genre is required.",
+        formData: req.body,
+      });
+    }
 
-res
-  .cookie("blogCreated", "Your blog has been posted successfully!", { maxAge: 5000 })
-  .redirect("/");
+   const uploadedImageUrl = req.file?.path || req.file?.secure_url || req.file?.url || null;
+
+  await Blog.create({
+      title,
+      body,
+      genre: finalGenre,
+      createdBy: req.user._id,
+    coverImageURL: uploadedImageUrl,
+    });
+
+    res
+      .cookie("blogCreated", "Your blog has been posted successfully!", { maxAge: 5000 })
+      .redirect("/");
 
   } catch (error) {
     console.error("Blog Creation Error:", error.message);
-    return res.status(500).send("An error occurred while creating the blog. Once check the length of the title.");
+    return res.status(500).render("addBlog", {
+      user: req.user,
+      genres: PREDEFINED_GENRES,
+      errorMessage: "An error occurred while creating the blog. Please check your inputs and Cloudinary setup.",
+      formData: req.body,
+    });
+  }
+});
+
+router.put("/:id", uploadCoverImage, async (req, res) => {
+  try {
+    if (!req.user) return res.status(401).send("Unauthorized");
+
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) return res.status(404).send("Blog not found");
+
+    if (blog.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).send("You are not authorized to edit this blog");
+    }
+
+    const { title, body, genre, customGenre } = req.body;
+    const finalGenre = genre === "other" ? (customGenre || "").trim() : (genre || "").trim();
+
+    if (!finalGenre) return res.status(400).send("Genre is required.");
+
+    blog.title = title;
+    blog.body = body;
+    blog.genre = finalGenre;
+
+    if (req.file) {
+      blog.coverImageURL = req.file.path || req.file.secure_url || req.file.url || blog.coverImageURL;
+    }
+
+    await blog.save();
+
+    return res
+      .cookie("blogCreated", "Your blog has been updated successfully!", { maxAge: 5000 })
+      .redirect(`/blog/${blog._id}`);
+  } catch (error) {
+    console.error("Blog Update Error:", error.message);
+    return res.status(500).send("An error occurred while updating the blog.");
   }
 });
 

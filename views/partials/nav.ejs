@@ -23,10 +23,13 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow rounded-3">
               <li>
+                <a class="dropdown-item fw-semibold" href="/user/profile"><i class="fa fa-user-circle"></i> Profile</a>
+              </li>
+              <li>
                 <a class="dropdown-item text-danger fw-semibold" href="/user/logout"><i class="fa fa-sign-out" ></i> Log out</a>
               </li>
               <!-- Divider line between logout and delete -->
-  <li><hr class="dropdown-divider"></li>
+              <li><hr class="dropdown-divider"></li>
               <li>
       <form id="delete-account-form" method="POST" action="/user/account/delete?_method=DELETE">
   <button type="submit" class="dropdown-item text-danger fw-semibold">

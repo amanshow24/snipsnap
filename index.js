@@ -10,6 +10,7 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 
 const Blog = require("./models/blog");
+const User = require("./models/user");
 
 const userRoute = require("./routes/user");
 const blogRoute = require("./routes/blog");
@@ -40,7 +41,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // ✅ Security middlewares
-app.use(helmet()); // Sets secure HTTP headers
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https:"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+        imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com", "https:"],
+        fontSrc: ["'self'", "https:", "data:"],
+        connectSrc: ["'self'", "https:"],
+      },
+    },
+  })
+);
 app.use(mongoSanitize()); // Sanitizes input to prevent NoSQL injection
 
 app.use(checkForAuthenticationCookie("token"));
@@ -51,7 +65,20 @@ app.use(methodOverride('_method'));
 // Homepage route
 app.get("/", async (req, res) => {
   try {
-    const allBlogs = await Blog.find({}).populate("createdBy");
+    const { genre, author, sort } = req.query;
+    const filter = {};
+
+    if (genre) filter.genre = genre;
+    if (author) filter.createdBy = author;
+
+    const blogQuery = Blog.find(filter).populate("createdBy");
+    blogQuery.sort(sort === "oldest" ? { createdAt: 1 } : { createdAt: -1 });
+
+    const [allBlogs, genres, authors] = await Promise.all([
+      blogQuery.exec(),
+      Blog.distinct("genre"),
+      User.find({}).select("fullName email").sort({ fullName: 1 }),
+    ]);
 
     const welcomeMessage = req.cookies.welcomeMessage;
     const blogCreated = req.cookies.blogCreated;
@@ -69,6 +96,13 @@ app.get("/", async (req, res) => {
     res.render("home", {
       user: req.user,
       blogs: allBlogs,
+      genres,
+      authors,
+      filters: {
+        genre: genre || "",
+        author: author || "",
+        sort: sort || "newest",
+      },
       welcomeMessage,
       blogCreated,
       blogDeleted,

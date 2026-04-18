@@ -6,12 +6,17 @@ const blogSchema = new Schema ({
        type: String ,
        required : true,
        maxlength: 60,
-       
     },
     body: {
        type: String ,
        required : true,
         maxlength: 25000,
+    },
+    genre: {
+       type: String,
+       required: [true, "Genre is required"],
+       trim: true,
+       maxlength: 50,
     },
     coverImageURL: {
        type: String ,

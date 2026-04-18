@@ -30,24 +30,68 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-// Sign Up Flow: Step 1 - email only
+// Sign Up Flow: Direct signup with email, password, and full name
 router.get("/signup", (req, res) => {
   res.render("signup-email", { errorMessage: null });
 });
+
+router.post("/signup", async (req, res) => {
+  const { fullName, email, password, confirmPassword } = req.body;
+
+  if (!fullName || !email || !password || !confirmPassword) {
+    return res.render("signup-email", {
+      errorMessage: "Please fill in all fields.",
+    });
+  }
+
+  if (password !== confirmPassword) {
+    return res.render("signup-email", {
+      errorMessage: "Passwords do not match.",
+    });
+  }
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.render("signup-email", {
+      errorMessage: "Email already in use",
+    });
+  }
+
+  try {
+    const newUser = new User({ fullName, email, password });
+    await newUser.save();
+
+    const token = createTokenForUser(newUser);
+    return res
+      .cookie("token", token)
+      .cookie("welcomeMessage", `Welcome, ${newUser.fullName}!`, { maxAge: 5000 })
+      .redirect("/");
+  } catch (err) {
+    let errorMsg = "Something went wrong. Try again.";
+    if (err.name === "ValidationError") {
+      errorMsg = Object.values(err.errors).map(e => e.message).join("<br>");
+    }
+    return res.render("signup-email", {
+      errorMessage: errorMsg,
+    });
+  }
+});
+
+/*
+// OTP-based signup flow is currently disabled.
+// Commented code is preserved for future reactivation.
 
 router.post("/signup-email", async (req, res) => {
   const { email } = req.body;
 
   let user = await User.findOne({ email });
 
-  // ✅ Case 1: User exists & is fully registered → Block
   if (user && user.fullName && user.password) {
     return res.render("signup-email", {
       errorMessage: "Email already in use",
     });
   }
 
-  // ✅ Case 2: Incomplete user exists → refresh OTP & reuse
   if (user) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const hashedOtp = await bcrypt.hash(otp, 10);
@@ -62,7 +106,6 @@ router.post("/signup-email", async (req, res) => {
     return res.redirect(`/user/verify-signup?email=${encodeURIComponent(email)}`);
   }
 
-  // ✅ Case 3: No user exists → create new temporary user
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   const hashedOtp = await bcrypt.hash(otp, 10);
 
@@ -79,9 +122,6 @@ router.post("/signup-email", async (req, res) => {
   return res.redirect(`/user/verify-signup?email=${encodeURIComponent(email)}`);
 });
 
-
-
-// Sign Up Flow: Step 2 - OTP + full form
 router.get("/verify-signup", (req, res) => {
   res.render("verify-signup", {
     email: req.query.email,
@@ -92,7 +132,7 @@ router.get("/verify-signup", (req, res) => {
 router.post("/verify-signup", async (req, res) => {
   const { email, otp, fullName, password } = req.body;
 
- const user = await User.findOne({ email }).select("+otp +otpExpiry +otpUsed");
+  const user = await User.findOne({ email }).select("+otp +otpExpiry +otpUsed");
 
   if (
     !user ||
@@ -129,15 +169,13 @@ router.post("/verify-signup", async (req, res) => {
       .cookie("welcomeMessage", `Welcome, ${user.fullName}!`, { maxAge: 5000 })
       .redirect("/");
   } catch (err) {
-
-     let errorMsg = "Something went wrong. Try again.";
-  if (err.name === "ValidationError") {
-    errorMsg = Object.values(err.errors).map(e => e.message).join("<br>");
-  }
+    let errorMsg = "Something went wrong. Try again.";
+    if (err.name === "ValidationError") {
+      errorMsg = Object.values(err.errors).map(e => e.message).join("<br>");
+    }
     return res.render("verify-signup", {
-    email,
-    errorMessage: errorMsg
-
+      email,
+      errorMessage: errorMsg,
     });
   }
 });
@@ -145,7 +183,6 @@ router.post("/verify-signup", async (req, res) => {
 router.post("/resend-signup-otp", async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email }).select("+otp +otpExpiry +otpUsed");
-
 
   if (!user) {
     return res.render("verify-signup", {
@@ -169,9 +206,10 @@ router.post("/resend-signup-otp", async (req, res) => {
   user.otpUsed = false;
   await user.save();
 
-  await sendOTPEmail(email, otp, "signup"); // ✅ Signup OTP Email
+  await sendOTPEmail(email, otp, "signup");
   return res.redirect(`/user/verify-signup?email=${encodeURIComponent(email)}`);
 });
+*/
 
 // ========== LOGOUT ==========
 router.get("/logout", (req, res) => {
@@ -179,6 +217,19 @@ router.get("/logout", (req, res) => {
     .clearCookie("token")
     .cookie("logoutMessage", "👋 Logged out successfully!", { maxAge: 5000 })
     .redirect("/");
+});
+
+router.get("/profile", requireAuth, async (req, res) => {
+  try {
+    const userBlogs = await Blog.find({ createdBy: req.user._id }).sort({ createdAt: -1 });
+    return res.render("profile", {
+      user: req.user,
+      blogs: userBlogs,
+    });
+  } catch (err) {
+    console.error("Profile page error:", err);
+    return res.status(500).send("Unable to load your profile.");
+  }
 });
 
 // ========== ACCOUNT DELETE ==========
@@ -213,6 +264,46 @@ router.get("/forgot-password", (req, res) => {
 });
 
 router.post("/forgot-password", async (req, res) => {
+  const { email, newPassword, confirmPassword } = req.body;
+
+  if (!email || !newPassword || !confirmPassword) {
+    return res.render("forgot-password", { errorMessage: "Please fill in all fields." });
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.render("forgot-password", { errorMessage: "Passwords do not match." });
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.render("forgot-password", { errorMessage: "No account found with this email" });
+  }
+
+  try {
+    user.password = newPassword;
+    await user.save();
+
+    const token = createTokenForUser(user);
+    return res
+      .cookie("token", token)
+      .cookie("welcomeMessage", "🔐 Password updated successfully. You're now logged in!", { maxAge: 5000 })
+      .redirect("/");
+  } catch (err) {
+    let errorMsg = "Something went wrong. Try again.";
+    if (err.name === "ValidationError") {
+      errorMsg = Object.values(err.errors).map(e => e.message).join("<br>");
+    }
+    return res.render("forgot-password", {
+      errorMessage: errorMsg,
+    });
+  }
+});
+
+/*
+// OTP-based password reset flow is currently disabled.
+// Commented code is preserved for future reactivation.
+
+router.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
 
@@ -235,7 +326,7 @@ router.post("/forgot-password", async (req, res) => {
   );
 
   try {
-    await sendOTPEmail(email, otp); // ✅ Default: Password reset OTP
+    await sendOTPEmail(email, otp);
     return res.redirect("/user/reset-password?email=" + encodeURIComponent(email));
   } catch (error) {
     console.error("Error sending OTP:", error);
@@ -249,14 +340,12 @@ router.get("/reset-password", (req, res) => {
   res.render("reset-password", {
     email: req.query.email,
     errorMessage: null,
-    
   });
 });
 
 router.post("/reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
   const user = await User.findOne({ email }).select("+otp +otpExpiry +otpUsed");
-
 
   if (!user || !user.otp || user.otpUsed || !user.otpExpiry || Date.now() > user.otpExpiry) {
     return res.render("reset-password", {
@@ -292,7 +381,7 @@ router.post("/reset-password", async (req, res) => {
     }
     return res.render("reset-password", {
       email,
-      errorMessage: errorMsg
+      errorMessage: errorMsg,
     });
   }
 });
@@ -300,7 +389,6 @@ router.post("/reset-password", async (req, res) => {
 router.post("/resend-otp", async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email }).select("+otp +otpExpiry +otpUsed");
-
 
   if (!user) {
     return res.render("reset-password", {
@@ -331,7 +419,7 @@ router.post("/resend-otp", async (req, res) => {
   );
 
   try {
-    await sendOTPEmail(email, otp); // ✅ Default: Password reset OTP
+    await sendOTPEmail(email, otp);
     return res.redirect("/user/reset-password?email=" + encodeURIComponent(email));
   } catch (error) {
     console.error("Resend OTP failed:", error);
@@ -341,5 +429,6 @@ router.post("/resend-otp", async (req, res) => {
     });
   }
 });
+*/
 
 module.exports = router;

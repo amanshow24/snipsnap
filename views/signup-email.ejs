@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <%- include("./partials/head") %>
-  <title>Sign Up - Email</title>
+  <title>Sign Up</title>
   <link rel="stylesheet" href="/css/responsive-signup-email.css">
 </head>
 <body style="font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa;">
@@ -18,9 +18,29 @@
         </div>
       <% } %>
 
-      <form action="/user/signup-email" method="POST">
+      <form action="/user/signup" method="POST">
         <div class="mb-3 position-relative">
-          <label for="email" class="form-label fw-semibold text-secondary">Enter your email</label>
+          <label for="fullName" class="form-label fw-semibold text-secondary">Full name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="fullName"
+            name="fullName"
+            placeholder="Your full name"
+            required
+            style="padding: 10px; border-radius: 10px;"
+          >
+          <i class="bi bi-person-fill" style="
+            position: absolute;
+            top: 70%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.2rem;"></i>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label for="email" class="form-label fw-semibold text-secondary">Email address</label>
           <input
             type="email"
             class="form-control"
@@ -37,12 +57,51 @@
             transform: translateY(-50%);
             color: #6c757d;
             font-size: 1.2rem;"></i>
-            
         </div>
-<p style="margin-top: 0.3rem; font-size: 0.95rem;padding: 10px; border-radius: 10px;">"OTP might be in spam/promotions folder."</p>
+
+        <div class="mb-3 position-relative">
+          <label for="password" class="form-label fw-semibold text-secondary">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Create a strong password"
+            required
+            style="padding: 10px; border-radius: 10px;"
+          >
+          <i class="bi bi-lock-fill" style="
+            position: absolute;
+            top: 70%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.2rem;"></i>
+        </div>
+
+        <div class="mb-3 position-relative">
+          <label for="confirmPassword" class="form-label fw-semibold text-secondary">Confirm password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="confirmPassword"
+            name="confirmPassword"
+            placeholder="Re-enter password"
+            required
+            style="padding: 10px; border-radius: 10px;"
+          >
+          <i class="bi bi-lock-fill" style="
+            position: absolute;
+            top: 70%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.2rem;"></i>
+        </div>
+
         <div class="d-grid">
-          <button type="submit" class="btn btn-dark btn-lg rounded-3">Send OTP</button>
-        </div>    
+          <button type="submit" class="btn btn-dark btn-lg rounded-3">Create account</button>
+        </div>
       </form>
 
       <p class="mt-4 text-center" style="font-size: 0.95rem;">

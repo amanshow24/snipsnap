@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("./partials/head") %>
+  <title><%= user.fullName || user.email %> | Profile</title>
+  <link rel="stylesheet" href="/css/responsive-home.css">
+  <style>
+    .profile-header {
+      background: linear-gradient(135deg, #212529, #343a40);
+      color: #fff;
+      border-radius: 24px;
+    }
+    .profile-card {
+      border-radius: 18px;
+      border: none;
+    }
+    .post-card {
+      border-radius: 18px;
+      transition: transform 0.2s ease;
+    }
+    .post-card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+</head>
+<body style="font-family: 'Segoe UI', sans-serif; background: #f8f9fa;">
+  <%- include("./partials/nav") %>
+
+  <main class="container py-5" style="max-width: 1000px;">
+    <div class="profile-header p-5 mb-4 shadow-lg">
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4">
+        <div>
+          <h1 class="fw-bold mb-2"><%= user.fullName || user.email %></h1>
+          <p class="mb-1">Email: <span class="text-white-50"><%= user.email %></span></p>
+          <p class="mb-0">Member since <%= new Date(user.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %></p>
+        </div>
+        <div class="text-end">
+          <a href="/blog/add-new" class="btn btn-light btn-lg rounded-pill">Create New Blog</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-lg-8">
+        <div class="card shadow-sm profile-card p-4 mb-4">
+          <h2 class="fw-bold mb-3">Your Posts</h2>
+          <p class="text-secondary mb-4">Manage and review all blogs you have published on SnipSnap.</p>
+
+          <% if (!blogs.length) { %>
+            <div class="alert alert-warning">You have not published any blog posts yet.</div>
+          <% } %>
+
+          <div class="row row-cols-1 g-4">
+            <% blogs.forEach(blog => { %>
+              <div class="col">
+                <div class="card post-card shadow-sm p-4 h-100">
+                  <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-3">
+                    <div>
+                      <h5 class="fw-bold mb-1"><a href="/blog/<%= blog._id %>" class="text-dark text-decoration-none"><%= blog.title %></a></h5>
+                      <p class="text-secondary mb-1" style="font-size: 0.95rem;"><%= blog.genre %> • <%= new Date(blog.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %></p>
+                    </div>
+                    <span class="badge bg-secondary"><%= blog.likes?.length || 0 %> likes</span>
+                  </div>
+                  <p class="text-muted" style="white-space: pre-wrap; max-height: 72px; overflow: hidden;"><%= blog.body.substring(0, 180) %><%= blog.body.length > 180 ? '...' : '' %></p>
+                  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
+                    <div class="d-flex gap-2">
+                      <a href="/blog/<%= blog._id %>" class="btn btn-sm btn-dark rounded-3">View Post</a>
+                      <a href="/blog/<%= blog._id %>/edit" class="btn btn-sm btn-outline-secondary rounded-3">Edit Post</a>
+                    </div>
+                    <form action="/blog/<%= blog._id %>?_method=DELETE" method="POST" class="m-0">
+                      <button type="submit" class="btn btn-sm btn-outline-danger rounded-3">Delete Post</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-4">
+        <div class="card shadow-sm profile-card p-4">
+          <h3 class="fw-bold mb-3">Profile Summary</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center">
+              <span>Published blogs</span>
+              <strong><%= blogs.length %></strong>
+            </li>
+            <li class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center">
+              <span>Role</span>
+              <strong><%= user.role %></strong>
+            </li>
+            <li class="list-group-item px-0 py-3">
+              <span class="text-secondary">Use this page to manage your posts and account actions.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%- include("./partials/scripts") %>
+  <%- include("./partials/footer") %>
+</body>
+</html>

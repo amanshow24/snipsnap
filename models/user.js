@@ -25,7 +25,7 @@ const userSchema = new Schema({
         if (!value) return true; // Allow undefined temporarily
         if (value.startsWith("$2a$") || value.startsWith("$2b$") || value.startsWith("$2y$")) return true;
 
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value);
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{8,}$/.test(value);
       },
       message:
         "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",

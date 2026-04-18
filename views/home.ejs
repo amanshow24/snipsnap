@@ -121,6 +121,42 @@
     <div class="container content-wrapper <%= blogs.length === 0 ? 'no-blogs' : '' %>">
       <h2 class="mb-4 fw-bold text-dark text-center" style="font-size: 2rem;">📚 Latest Blogs</h2>
 
+      <div class="card shadow-sm rounded-4 p-4 mb-4 border-0">
+        <form action="/" method="GET" class="row g-3 align-items-end">
+          <div class="col-12 col-md-4">
+            <label class="form-label fw-semibold text-secondary">Genre</label>
+            <select name="genre" class="form-select" style="padding: 10px; border-radius: 10px;">
+              <option value="">All genres</option>
+              <% (genres || []).sort().forEach((genreOption) => { %>
+                <option value="<%= genreOption %>" <%= filters.genre === genreOption ? 'selected' : '' %>><%= genreOption %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label class="form-label fw-semibold text-secondary">Author</label>
+            <select name="author" class="form-select" style="padding: 10px; border-radius: 10px;">
+              <option value="">All authors</option>
+              <% (authors || []).forEach(author => { %>
+                <option value="<%= author._id %>" <%= filters.author === author._id.toString() ? 'selected' : '' %>><%= author.fullName || author.email %></option>
+              <% }) %>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-3">
+            <label class="form-label fw-semibold text-secondary">Sort by</label>
+            <select name="sort" class="form-select" style="padding: 10px; border-radius: 10px;">
+              <option value="newest" <%= filters.sort === 'newest' ? 'selected' : '' %>>Newest First</option>
+              <option value="oldest" <%= filters.sort === 'oldest' ? 'selected' : '' %>>Oldest First</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-1 d-grid">
+            <button type="submit" class="btn btn-dark">Go</button>
+          </div>
+        </form>
+      </div>
+
       <% if (blogs.length === 0) { %>
         <p class="text-center text-muted">No blogs available. Be the first to post!</p>
       <% } %>
@@ -137,6 +173,7 @@
 
                 <!-- Blog Title -->
                 <h5 class="card-title fw-bold text-dark mb-2" style="font-size: 1.1rem;"><%= blog.title %></h5>
+                <span class="badge bg-secondary mb-2"><%= blog.genre %></span>
 
                 <!-- Author and Date -->
                 <div class="d-flex justify-content-between align-items-center mb-2">

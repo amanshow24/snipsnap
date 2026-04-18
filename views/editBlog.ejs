@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <%- include("./partials/head") %>
-  <title>Add New Blog | SnipSnap</title>
+  <title>Edit Blog | SnipSnap</title>
   <style>
     .form-label {
       font-weight: 600;
@@ -36,82 +36,71 @@
     }
 
     .card-blog-form {
-      max-width: 600px;
+      max-width: 700px;
       border: none;
       border-radius: 20px;
       padding: 2.5rem;
     }
-
   </style>
-  <link rel="stylesheet" href="/css/responsive-addblog.css">
-
 </head>
 <body class="bg-light" style="font-family: 'Segoe UI', sans-serif;">
   <%- include("./partials/nav") %>
 
   <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
     <div class="card shadow card-blog-form w-100">
-      <h2 class="text-center mb-4 text-dark fw-bold" style="font-size: 2rem;">✍️ Create a New Blog</h2>
+      <h2 class="text-center mb-4 text-dark fw-bold" style="font-size: 2rem;">Edit Your Blog</h2>
 
-      <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
-        <div class="alert alert-danger text-center fw-semibold rounded-3 shadow-sm mb-4" style="font-size: 0.95rem;">
-          <%= errorMessage %>
-        </div>
-      <% } %>
-
-      <form id="addBlogForm" action="/blog" method="post" enctype="multipart/form-data" novalidate>
-        <!-- Cover Image -->
+      <form id="addBlogForm" action="/blog/<%= blog._id %>?_method=PUT" method="post" enctype="multipart/form-data" novalidate>
         <div class="mb-4">
-          <label for="coverImage" class="form-label">Cover Image</label>
+          <label for="coverImage" class="form-label">Cover Image (optional)</label>
           <input type="file" class="form-control" id="coverImage" name="coverImage">
+          <% if (blog.coverImageURL) { %>
+            <small class="text-muted d-block mt-2">Current image will stay if no new file is uploaded.</small>
+          <% } %>
         </div>
 
-        <!-- Title -->
         <div class="mb-4">
           <label for="title" class="form-label">Title</label>
-          <input type="text" class="form-control" id="title" name="title" maxlength="60" placeholder="Enter your blog title (within 60 chars)" value="<%= formData?.title || '' %>" required>
+          <input type="text" class="form-control" id="title" name="title" maxlength="60" value="<%= blog.title %>" required>
           <div id="titleError" class="invalid-feedback d-none">
             Title is required and must be under 60 characters.
           </div>
-          <div class="form-text text-muted mt-1" style="font-size: 0.9rem;">Give your blog a meaningful title.</div>
         </div>
 
-        <!-- Genre -->
+        <% const useCustomGenre = !genres.includes(blog.genre); %>
         <div class="mb-4">
           <label for="genre" class="form-label">Genre</label>
           <select class="form-select" id="genre" name="genre" required style="padding: 10px; border-radius: 10px;">
-            <option value="" selected disabled>Select blog genre</option>
+            <option value="" disabled>Select blog genre</option>
             <% genres.forEach((genreOption) => { %>
-              <option value="<%= genreOption %>" <%= formData?.genre === genreOption ? 'selected' : '' %>><%= genreOption %></option>
+              <option value="<%= genreOption %>" <%= blog.genre === genreOption ? 'selected' : '' %>><%= genreOption %></option>
             <% }) %>
-            <option value="other" <%= formData?.genre === 'other' ? 'selected' : '' %>>Other</option>
+            <option value="other" <%= useCustomGenre ? 'selected' : '' %>>Other</option>
           </select>
           <div id="genreError" class="invalid-feedback d-none">
             Genre is required.
           </div>
-          <div class="form-text text-muted mt-1" style="font-size: 0.9rem;">Pick an existing genre or choose Other to add a custom one.</div>
         </div>
 
-        <div class="mb-4 <%= formData?.genre === 'other' ? '' : 'd-none' %>" id="customGenreContainer">
+        <div class="mb-4 <%= useCustomGenre ? '' : 'd-none' %>" id="customGenreContainer">
           <label for="customGenre" class="form-label">Custom Genre</label>
-          <input type="text" class="form-control" id="customGenre" name="customGenre" placeholder="Enter a custom genre" value="<%= formData?.customGenre || '' %>" style="padding: 10px; border-radius: 10px;">
+          <input type="text" class="form-control" id="customGenre" name="customGenre" value="<%= useCustomGenre ? blog.genre : '' %>" placeholder="Enter a custom genre" style="padding: 10px; border-radius: 10px;" <%= useCustomGenre ? 'required' : '' %>>
           <div id="customGenreError" class="invalid-feedback d-none">
             Please enter a custom genre.
           </div>
         </div>
 
-        <!-- Body -->
         <div class="mb-4">
           <label for="body" class="form-label">Body</label>
-          <textarea name="body" class="form-control" id="body" rows="7" maxlength="25000" placeholder="Write your content here..." required><%= formData?.body || '' %></textarea>
+          <textarea name="body" class="form-control" id="body" rows="7" maxlength="25000" required><%= blog.body %></textarea>
           <div id="bodyError" class="invalid-feedback d-none">
             Body is required and must be under 25,000 characters.
           </div>
         </div>
 
-        <!-- Submit -->
-        <div class="d-grid">
-          <button type="submit" class="btn btn-publish">Publish Blog</button>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-publish">Save Changes</button>
+          <a href="/blog/<%= blog._id %>" class="btn btn-outline-dark">Cancel</a>
         </div>
       </form>
     </div>
@@ -119,8 +108,5 @@
 
   <%- include("./partials/scripts") %>
   <%- include("./partials/footer") %>
-
-  
-
 </body>
 </html>
