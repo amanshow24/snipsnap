@@ -1,120 +1,155 @@
+# SnipSnap
 
-# 📝 SnipSnap
+SnipSnap is a full-stack blogging platform where users can publish posts, explore content by genre or author, and engage through likes and comments. It is built with Node.js, Express, MongoDB, and EJS, with a responsive UI for desktop and mobile.
 
-SnipSnap is a dynamic, full-featured blogging platform that enables users to create, read, and interact with blog posts. With user authentication, responsive design, and clean UI, it’s built to be fast, extensible, and beginner-friendly.
+## Live Demo
 
----
+https://snipsnap-tyfs.onrender.com/
 
-## 📸 Live Demo 
+## Features
 
- 🔗 [Live Demo]  (https://snipsnap-1xvw.onrender.com) 
+- User authentication with JWT-based session cookie
+- Sign up, sign in, logout, and account deletion
+- Create, edit, and delete your own blog posts
+- Upload blog cover images with Cloudinary
+- Like and unlike blog posts
+- Comment on blogs and like/unlike comments
+- Filter blogs on home page by:
+  - Genre
+  - Author
+  - Sort order (newest or oldest)
+- User profile page with personal posts
+- Static pages: FAQ, Contact, About, Team, Privacy, Terms
+- Contact form message storage
+- Security middleware:
+  - Helmet
+  - Express Mongo Sanitize
 
----
+## Tech Stack
 
-## ✨ Features
+Frontend
+- EJS templates
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Bootstrap assets
 
-- 📝 Create and publish blog posts
-- 🔐 User authentication with secure password handling
-- 💬 Comment system for posts
-- ❤️ Like system for blogs and comments
-- 📧 Email-based OTP verification for signup and password reset
-- 📱 Fully responsive UI with mobile-first CSS
-- 🧰 Admin/user-based controls and alert messages
-- 📬 Contact form, FAQ, About Us, Team, Terms & Privacy pages
-
----
-
-## 🛠️ Tech Stack
-
-**Frontend:**
-- HTML5, CSS3 (Responsive)
-- JavaScript
-- EJS (Embedded JavaScript templating)
-
-**Backend:**
+Backend
 - Node.js
 - Express.js
-- MongoDB with Mongoose
+- MongoDB + Mongoose
 
-**Email Service:**
-- SendGrid API
+Services and Libraries
+- Cloudinary + Multer storage for image uploads
+- SendGrid for email utility
+- bcrypt for password hashing
+- jsonwebtoken for auth token creation/verification
+- cookie-parser and method-override
 
-**Authentication:**
-- Custom middleware
-- OTP-based verification
-- JWT (planned or implied from structure)
+## Project Structure
 
----
+- index.js
+- routes/
+  - user.js
+  - blog.js
+  - static.js
+- models/
+  - user.js
+  - blog.js
+  - comment.js
+  - message.js
+- middlewares/
+  - authentication.js
+- services/
+  - authentication.js
+  - sendMail.js
+- views/
+- public/
 
-## 🚀 Installation
+## Environment Variables
 
-Clone the repository and install dependencies:
+Create a .env file in the project root and add:
 
-```bash
-git clone https://github.com/amanshow24/snipsnap.git
-cd snipsnap
-npm install
-```
-
-Create a `.env` file in the root directory with the following values:
-
-```env
+PORT=9000
+SECRET=your_jwt_secret
 MONGODB_URI=your_mongodb_connection_string
+
 SENDGRID_API_KEY=your_sendgrid_api_key
-EMAIL_FROM=your_verified_sender_email
-SESSION_SECRET=your_secret_key
-```
+SENDGRID_SENDER=your_verified_sender_email
 
-Then start the development server:
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-```bash
-npm start
-```
+## Getting Started
 
-App should be live at `http://localhost:3000`.
+1. Clone the repository
+   git clone https://github.com/amanshow24/snipsnap.git
 
----
+2. Move into the project folder
+   cd snipsnap
 
-## ▶️ Usage
+3. Install dependencies
+   npm install
 
-1. Sign up using your email and OTP verification.
-2. Create new blog posts from the dashboard.
-3. Like and comment on posts.
-4. Explore other pages like FAQ, Contact, and Team.
-5. Reset your password via email OTP if needed.
+4. Add your environment variables in .env
 
----
+5. Start the app
+   npm start
 
-## 🤝 Contributing
+For development with auto-restart:
 
-We welcome contributions from the community!
+npm run dev
 
-1. Fork the repository.
-2. Create your feature branch: `git checkout -b feature/my-feature`
-3. Commit your changes: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature/my-feature`
-5. Open a pull request.
+App runs at:
 
-Please follow existing code style and naming conventions.
+http://localhost:9000
 
----
+## Home Page Filters
 
-## 📄 License
+The home page supports query-based filtering:
 
-<!-- You can change this once you choose a license -->
-Licensed under the [MIT License](LICENSE).
+- genre: filter posts by genre
+- author: filter posts by author id
+- sort: newest (default) or oldest
 
----
+Example pattern:
 
-## 🙏 Acknowledgements
+/?genre=Technology&sort=oldest
 
-- [Express.js](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Mongoose](https://mongoosejs.com/)
-- [SendGrid](https://sendgrid.com/)
-- [Bootstrap (optional)](https://getbootstrap.com/)
-- All open-source contributors and testers!
+## Authentication Notes
 
----
+- Auth token is stored in a cookie named token.
+- Current flow supports direct sign up and direct password reset.
+- OTP-based signup and password reset routes are present in comments for possible future use.
 
-> Created with ❤️ by [Aman Show](https://github.com/amanshow24)
+## Scripts
+
+- npm start: run production server
+- npm run dev: run with nodemon
+
+## Deployment
+
+The app is currently deployed on Render. For deployment:
+
+- Set all required environment variables in your hosting provider
+- Ensure MongoDB Atlas network access is configured
+- Ensure SendGrid sender identity is verified
+- Ensure Cloudinary credentials are valid
+
+## Contributing
+
+1. Fork this repository
+2. Create a feature branch
+3. Commit your changes
+4. Push your branch
+5. Open a pull request
+
+## License
+
+This project is currently marked as ISC in package.json.
+
+## Author
+
+Aman Show
+https://github.com/amanshow24
